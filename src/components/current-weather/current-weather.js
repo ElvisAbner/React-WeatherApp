@@ -1,6 +1,32 @@
 import "./current-weather.css";
 
-const CurrentWeather = ({ data }) => {
+const CurrentWeather = ({ data, loading }) => {
+  const propTypes = {
+    data: PropTypes.shape({
+      city: PropTypes.string.isRequired,
+      weather: PropTypes.arrayOf(
+        PropTypes.shape({
+          description: PropTypes.string.isRequired,
+          icon: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+      main: PropTypes.shape({
+        temp: PropTypes.number.isRequired,
+        feels_like: PropTypes.number.isRequired,
+        wind: PropTypes.shape({
+          speed: PropTypes.number.isRequired,
+        }).isRequired,
+        humidity: PropTypes.number.isRequired,
+        pressure: PropTypes.number.isRequired,
+      }).isRequired,
+    }).isRequired,
+    loading: PropTypes.bool.isRequired,
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="weather">
       <div className="top">
@@ -41,5 +67,7 @@ const CurrentWeather = ({ data }) => {
     </div>
   );
 };
+
+CurrentWeather.propTypes = propTypes;
 
 export default CurrentWeather;
