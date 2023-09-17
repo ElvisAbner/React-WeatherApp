@@ -4,14 +4,17 @@ import { geoApiOptions, GEO_API_URL } from "../../api";
 
 const Search = ({ onSearchChange }) => {
   const [search, setSearch] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const loadOptions = (inputValue) => {
+    setLoading(true);
     return fetch(
       `${GEO_API_URL}/cities?minPopulation=1000000&namePrefix=${inputValue}`,
       geoApiOptions
     )
       .then((response) => response.json())
       .then((response) => {
+        setLoading(false);
         return {
           options: response.data.map((city) => {
             return {
@@ -20,6 +23,9 @@ const Search = ({ onSearchChange }) => {
             };
           }),
         };
+      })
+      .catch(() => {
+        setLoading(false);
       });
   };
 
@@ -29,13 +35,16 @@ const Search = ({ onSearchChange }) => {
   };
 
   return (
-    <AsyncPaginate
-      placeholder="Search for city"
-      debounceTimeout={600}
-      value={search}
-      onChange={handleOnChange}
-      loadOptions={loadOptions}
-    />
+    <>
+      {loading && <div>Loading...</div>}
+      <AsyncPaginate
+        placeholder="Search for city"
+        debounceTimeout={600}
+        value={search}
+        onChange={handleOnChange}
+        loadOptions={loadOptions}
+      />
+    </>
   );
 };
 
