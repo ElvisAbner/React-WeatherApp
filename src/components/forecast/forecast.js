@@ -18,7 +18,11 @@ const WEEK_DAYS = [
   "Sunday",
 ];
 
-const Forecast = ({ data }) => {
+const Forecast = ({ data, loading }) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   const dayInAWeek = new Date().getDay();
   const forecastDays = WEEK_DAYS.slice(dayInAWeek, WEEK_DAYS.length).concat(
     WEEK_DAYS.slice(0, dayInAWeek)
@@ -85,3 +89,4 @@ const Forecast = ({ data }) => {
 };
 
 export default Forecast;
+
